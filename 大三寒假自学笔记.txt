@@ -1,0 +1,171 @@
+遇到的问题：
+1.maven在打包package时，出现jdk版本问题，默认setting.xml中jdk的版本是1.4，我的是1.8，后来在setting.xml中更改配置就行了。
+2.maven项目下载jar特别慢，改用国内镜像，特别是阿里云的镜像，巨快！
+3.maven中，java文件打包成jar,web文件打包成war，父工程打包成pom文件，pom也可以是聚合。2020-02-10 09:31:54
+4.junit单元测试4.0及以上版本才有注解。2020-02-10 10:19:14
+5.解决maven项目中缺失web.xml报错：
+	第一种方法：pom文件配置
+<properties>
+    <failOnMissingWebXml>false</failOnMissingWebXml>
+</properties>
+	第二种方法：自动生成
+右击项目——>Java EE Tools——>Generate Deployment Descriptor Stub.  2020-02-11 09:58:12
+6.第一次创建springboot项目时，spring-boot maven spring-boot-starter-parent依赖更新不到，此时在idea里编辑maven的setting.xml就能解决！而且只有在idea里编辑才有效。2020-02-14 11:12:12
+7.idea中无法使用快捷键，因为和输入法、聊天工具、其他存在快捷键的软件冲突了，我把QQ关闭就行了。2020-02-15 16:46:12
+8.添加子模块时，出现多个root，原因是没有在父级pom文件中添加子模块
+9.idea无法通过域名+项目名称访问，其实是在讲项目部署到tomcat时，没有指定Application Context的名称，即war包解压后的名称，可以立即为项目名。
+10.在Postman中，按名称发送请求时报错400， "reason": "Unknown key for a VALUE_STRING in [first_name].",原因时因为在发送求情时，boby里带了数据，删除boby中数据再请求，成功。
+11.在启动lagstash进行mysql往es转化的时候，报错“The given configuration is invalid. Reason: Expected one of [ \t\r\n], "#", "input", "filter", "output" at line 1, column 1 (byte 1)”，原因：mysql.conf文件是创建记事本后改后缀得来的，非utf-8；解决方法：在idea中创建mysql.conf文件，因为idea配置全局utf8，创建完后粘贴赋值问题解决
+12.家中百兆宽带无法下载各种文件，推测局域网问题，解决方法：使用手机网络。
+13.idea第一次连接数据库出现时区错误，既IDEA连接mysql又报错！Server returns invalid timezone. Go to 'Advanced' tab and set 'serverTimezone' prope，解决方案：在mysql命令下输入：set time_zone = '+8:00';还要在advanceced下设置serverTimezone:Asia/Shanghai
+14.es配置文件的名称默认为elasticsearch，连接java时使用了别名时需要更改
+15.redis安装后通过AnotherRedisDesktopManager无法连接，原因1：配置默认ip;原因2：关闭防火墙。
+16.通过Jedis连接报错“(error) DENIED Redis is running in protected mode because protected mode is enabled （关闭保护模式没生效）”，解决方案：https://blog.csdn.net/qq_2300688967/article/details/81451151
+17.linux安装mysql:https://blog.csdn.net/qq_37598011/article/details/93489404
+18.虚拟机linux部署web项目后，本机ie浏览器无法访问，解决方案：切换qq浏览器即可访问
+19.dos窗口输入telnet提示“不是内部命令”，解决方案：在控制面板中的“开启和关闭windows”中，开启telnet client即可
+20.for循环中可以使用break,以及break指定层。
+21.IDEA新建项目时，没有Spring Initializr，解决方法：https://blog.csdn.net/qq_16508993/article/details/96761336，到Installed中搜索！太坑了！奶奶的！
+22.java基本类型取值，1字=2字节，1字节=8位，1字=16位；byte,short,int,long分别对应1、2、4、8字节，char型2字节，boolean型1字节，浮点型：单精度4字节，双精度8字节。
+23.springboot中存放视图的目录templates:该目录是安全的，意味着该目录下的内容是不允许外界直接访问的，需要例如经controller跳转
+24.使用thymeleaf时报错：An error happened during template parsing (template: "class path resource [templates/index.html]")，解决方案：index.html的文件开头，就是因为加了https: xmlns:https="http://www.w3.org/1999/xhtml"和
+xmlns:th="http://www.thymeleaf.org"导致调用的时候原本要调用第二句话的代码调用了第一句代码中的方法发生错误，把第一句代码删除就可以了
+25.idea不像tomcat那样，直接把项目部署到webapp后，上传图片就可以直接显示；解决方法：将指定文件夹设定为服务器启动文件夹，即部署到服务器上Deployment,但要注意部署后的访问路径问题，要加上根路径，即Application Context。
+26.idea项目粘贴复制项目静态资源文件后，无法访问静态资源，解决方案：重启idea，重新加载整个项目即可。
+27.idea连接数据库出现timeZone错误。，解决方法：在配置 spring.datasource.url 的时候加上后面的配置就可以了：?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&useSSL=false，其中UTC代表的是全球标准时间，我们使用的时间是北京时区也就是东八区，领先UTC八个小时
+28.springboot项目中，static文件夹可以直接访问，而template文件夹默认是不允许直接访问template下的文件的，是受保护的，但可通过requestmapping返回的形式访问
+29.springboot整合mybatis无论是用mapper文件配置还是直接注解，都需要在dao接口上注解@mapper
+30.构造代码块，在执行构造函数时执行
+31.数据库字段叫group后无法查询，因为group为数据库关键字
+32.springMVC使用request.getInputStream()获取流为空,因为springMVC已经读取过一次输入流,所以在Controller再次获取流为空,解决方法：使用springmvc自带的文件上传来接收文件，老式的ajax发送也可以接收。
+33.web页面和idea控制台输出中文乱码冲突，即在VM options填写-Dfile.encoding=UTF-8，web页面不乱码，idea
+控制台乱码，解决问题：tomcat输出信息乱码、idea控制台输出乱码、web界面乱码，解决方案：分5步，1.在VM options填写-Dfile.encoding=UTF-8；2.在idea.exe.vmoptions和idea64.exe.vmoptions文件最后加上-Dfile.encoding=UTF-8；3.在setting-Appearance中设置温软雅黑ui，即Use custom font;4.在help-edit custom optaion中加上-Dfile.encoding=UTF-8；5.重启idea;
+34.idea中使用mybatis和eclipose区别,1.不光要在dao层加上mapper,还需要在maven中配置扫描xml文件
+35.在springboot中window.location.href不能直接访问template中的模板引擎，只能通过controller跳转
+36.springboot使用mybatis分页插件无效，原因是引入spring配置时的pagehelper依赖无效，要引入springboot的pagehelper-spring-boot-starter才有效
+37.springboot的yml文件中不能用%开头，解决方法：首尾加上''
+38.thymeleaf有关herf的使用：https://www.cnblogs.com/moncat/p/7366541.html
+39.userdel tom只是删除用户，并不删除tom的文件等资源，userdel -r tom，删除tom的一切
+40.thymeleaf中，herf中动态传值用user.account,,不需要加${}，而src中直接使用${User.account()}
+41.thymeleaf中直接按照路径跳转需要用session.User.属性
+42.springboot中使用路径携带参数会使路径再加一层，导致跳转后的页面静态资源无法访问。解决方法：不使用路径传参，直接使用参数传参。
+43.springboot的thymeleaf中，在使用th标签后，如果动态传的参数值为空，那么可能会报错标签未正常结束，而且会使后续的页面无法显示。解决方法：确认存session.
+44.在使用logstash将mysql的数据同步到ElasticSearch中时，无论mysql中有多少数据，同步到ElasticSearch中只有一条，原因是logstash中关联mysql和es的.conf配置文件中，document_id未配置为相关表的id名称，而是使用了默认的id;
+45.elsaticsearch控制台报中文乱码，原因：国内软件默认字符编码为GBK，解决方法：在elasticsearch的配置文件夹config下的jvm.options中加入-Dfile.encoding=GBK
+46.注意json字符串的返回结果，整形或string类型无法转化为jsonobject，json数组[],json对象{},json中字符串"",json中数字类型无符号，特别注意，在调用各种ai接口时，注意线程问题！
+47.EL表达式中数字不能开头，否则在thymeleaf中无法识别而报错
+48.git上传文件时遇到错误，使用git add -A,详细步骤：https://blog.csdn.net/m0_37725003/article/details/80904824
+49.Mysql You can change this value on the server by setting the max_allowed_packet' variable. 异常，原因：MySQL根据配置文件会限制server接受的数据包大小。有时候大的插入和更新会被max_allowed_packet 参数限制掉，导致失败。解决方法：可以编辑my.cnf来修改（windows下my.ini）,在[mysqld]段或者mysql的server配置段进行修改。max_allowed_packet = 20M如果找不到my.cnf可以通过mysql --help | grep my.cnf
+50.div被遮挡，让一个div层浮在最上层的方法：设置 z-index:9999，首先将position定义为，absolute、relative或fixed。 【必须position为以上三个属性，z-index才能层级体现出来，才能起作用】 设置 style 中 z-index:auto 
+auto可定义为一个值(整数数字)，越大代表越置前，如可定义为： z-index:9999。 若定义为-1，代表为最底层。 
+如果要让div1不被div2遮挡，则将div1的z-index设置比div2大就可以了。
+51.在style中设置display:none后，可通过toggle(10)进行展示
+52.
+
+
+idea快捷键：
+1.sout，快速构建输出语句
+2.lsit.for+回车，快速构建增强for循环
+3.ctrl+Z返回，与之相反的为ctrl+shift+Z
+4.
+
+
+直播
+
+
+新的理解：
+1.springboot默认不支持jsp，其提倡用模板的形式，例如thymeleaf模板引擎
+《程序语言基础（java）》
+2.在java中“+=”会自动类型强制转换，而“=+”不会
+3.装箱和拆箱，https://www.cnblogs.com/javastack/p/9644520.html
+4.byte,short,int,long,boolean,char,float,double同22
+5.java中有一个运算特性：自动类型提升（以大的为主，小的向大的提升），例如byte b=1;int a=b+1;运算时，b自动转换为int型
+6.使用位运算符对布尔值进行运算时，没有短路效应！
+7.char类型中，65到90对应大写字母，97到122对应小写字母
+8.for(表达式1，表达式2，表达式3)，程序在执行时，先执行表达式1，在执行表达式2；当表达式2满足时执行循环体，再执行表达式3；当表达式2不满足时，跳出循环；所以表达式3一定是在表达式2满足，并且执行了一遍循环体以后才执行的。
+9.continue的用法，执行到continue后，程序直接进入下一次循环，例如while(a<10){continue;a++}为死循环，因为a++不会被执行！
+10.代码块，外部不可见内部，内部可见外部；
+11.重载函数：同一个类中的同名函数，但是参数列表不相同，（和返回值无关，不能因为返回值不同，就说是重载）
+《面向对象编程（java）》
+12.面向对象主要有四大特性，分别为：抽象、封装、继承、多态。
+13.this调用当前对象，emp1.setName()和emp2.setName()时,this.name=name.隐式变量，等价于emp1.setName(emp1,"")；应用场景：内部类调用外部类，局部变量和成员变量重名，在构造方法中调用其它方法。注意：构造函数重载的互调，this调用语句必须写在构造函数方法的第一行。即构造函数中可以调用另外一个构造函数，但是必须放在第一行。
+14.静态变量是本类下的所有对象共享的，与对象没有关系。
+静态的方法是直接使用，也是类名调用，在方法内不能出现非静态的成员变量。
+原因是：静态方法不属于某个对象，里面使用的变量也无法知道属于哪个对象的。
+15.final的用法：
+	1、final 修饰类：表示最终的类，该类不能再有子类
+	2、final 修饰方法：表示最终的方法，该方法不能被子类覆盖或重写
+	3、final 修饰变量：表示最终的变量，那么即为常量，该常量只能被赋值一次。
+16.装箱和拆箱是在编译阶段进行的一个过程。
+17.包装类都是final类型的，都是不可以被继承的。
+18.抽象类的子类必须实现其抽象方法吗？答：不一定要实现。 
+如果没有全部实现抽象方法,那么子类也是一个抽象类
+19.世界那么大还是遇见你
+20.被继承的类成为基类、超类、父类
+21.对象初始化顺序：先静后动，先父后子；所以整个子类的初始化顺序是：
+	1.父类的静态部分初始化
+	2.子类的静态部分初始化
+	3.子类继承自父类的非静态部分的初始化
+	4.子类自身的非静态部分的初始化
+22.子类重写父类方法时，要保持方法一致（访问权限可以提高），否则会报错
+23.当父类的引用调用其方法时，要看子类是否重写了该方法，如果子类重写了该方法，则调用子类的该方法，否则调用父类的。
+24.super调用父类，super.属性，super()调用父类构造方法；子类的构造函数中，调用父类的构造函数，此时必须使用super；
+25.抽象类的特征：
+       1）使用abstract关键字修饰的类称为抽象类，
+       2）抽象类不能实例化对象，原因是抽象方法无法被调用，
+       3）有抽象方法的类肯定是抽象类，但是抽象类中不是必须有抽象方法。
+26.inteface的method都是public abstract修饰的；inteface的属性只能是final static修饰
+《常用对象(java)》
+27.throws作用于方法体声明的时候抛出异常；throw作用于方法内部抛出异常，例如throw new Exeption()
+28.捕获多个异常时，捕捉的有父子关系的，要先捕获子类，再捕获父类。
+29.Math.Random()，其返回值为带正号的double值，0<=返回值<10
+30.在多线程的情况下使用StringBuffer保证数据的同步。在单线程情况下两个都可以用，StringBuilder会快一些。
+31.多线程的三种实现形式：
+	1）继承Thread类：从Thread类中实例化的对象即代表线程，启动一个线程就是建立一个Thread实例。因为完成线程真正功能的代码放在类的run()方法中，所以可以将线程要做的事写在run()方法中即可。然后调用Thread类中的start()方法执行线程，也就是调用run()方法。
+  	2）实现Runnable接口：Java不支持多重继承，因此如果有一个子类要想实现线程，那就可以实现Runnable接口。实现了Runnable接口并编写run()方法，使该任务可执行你的命令。
+ 	3）实现Callable接口：Callable接口类似于Runnable接口，实现起来较为复杂，和Runnable接口有些不同，最主要的区别是Callable接口要实现的call()方法中可以抛出异常，且还可以在任务执行后返回值。
+32.多线程安全，关键字synchronized,两种方式，1）采用同步方法，修饰方法，synchronized(this){}；2）采用同步代码块
+《高级对象(JAVA)》
+33.File file=new File(filename)只是创建一个文件对象，真正要创建一个文件需要使用file.createNewFile(),创建文件夹mkdir(),以及delete()、renameTo(File dest)、isDirectory()、isFile()、exists()、canRead()、isHidden()等方法
+34.反射：在运行状态中，对于任意一个类，都能够知道这个类的所有属性和方法；对于任意一个对象，都能够调用它的任意一个方法和属性；这种动态获取的信息以及动态调用对象的方法的功能称为Java语言的反射机制。
+35.springboot中配置文件优先级：src/main/resources/config下application.properties覆盖src/main/resources下application.properties中相同的属性，在相同优先级位置同时有application.properties和application.yml，那么application.yml里面的属性就会覆盖application.properties里的属性。
+面试题
+36.nextInt()只读取当前行，光标不会去下一行，nextLine()会扫描到下一行，使用nextLine()读取数字时，别忘了用Integer.parseInt（）强制转化。
+37.解决数据溢出的方法：int a = 2147483647;//定义一个int型变量a的值为int型能够保存的最大值即可
+38.
+
+
+假期安装：
+1.idea
+2.rabbitMQ
+3.erlong:消息队列配合使用
+4.gcc:yum install gcc-c++
+4.redis(linux)：缓存（http://download.redis.io/releases/redis-5.0.7.tar.gz)
+5.ElasticSearch：搜索引擎
+6.Postman :详细使用方法：https://blog.csdn.net/fxbin123/article/details/80428216
+7.kibana：操作es数据，同postman
+8.Logstash:进行mysql与es的数据转化
+9.IK分词器:用于中文分词
+10.AnotherDesktopManager：redis数据可视化
+11.
+
+
+
+常用链接：
+1.http://localhost:15672/#/         消息队列RabbitMQ
+2.http://localhost:8081/swagger-ui.html          接口文档swagger
+3.http://localhost:9200/          ElasticSearch
+4.http://localhost:5601            kibana
+5.http://www.cnsoftbei.com/plus/view.php?aid=479	软件杯
+6.https://jinaconvert.com/cn/convert-to-ico.php    图片转 .ico
+
+
+
+
+工具：
+1.PanDownload
+2.
+
+
+项目安排：
+1.AI活体检测
